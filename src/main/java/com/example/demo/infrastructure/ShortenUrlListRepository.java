@@ -1,40 +1,74 @@
-package com.example.demo.presentation;
+package com.example.demo.infrastructure;
 
-import com.example.demo.application.UrlShortenerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.example.demo.domain.Base58;
+import com.example.demo.domain.NewUrlNotFoundException;
+import com.example.demo.domain.ShortenUrl;
+import org.springframework.stereotype.Repository;
 
-@RestController
-public class UrlShortenerController {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-    //		다음 요구사항을 만족하는 단축 URL 생성 API 개발
-    //		- 단축 URL 생성 기능
-    //		- 생성된 단축 URL로 요청시 원래 URL로 리다이렉트
+// Repository는 데이터를 저장/조회하는 일만 해야함
 
-    private UrlShortenerService urlShortenerService;
+@Repository
+public class ShortenUrlListRepository {
 
-    @Autowired
-    public UrlShortenerController(UrlShortenerService urlShortenerService) {
-        this.urlShortenerService = urlShortenerService;
+    private List<ShortenUrl> urls = new ArrayList<>();
+
+    public boolean checkUrl(String newUrl){
+        for(ShortenUrl url : urls){
+            if(url.getNewUrl().equals(newUrl))
+                return false;
+        }
+        return true;
     }
 
-    // 특정 자원에 대해 생성, 조회(id -> 단축된 문자열)
-
-    //		- 단축 URL 생성 기능
-    @RequestMapping(path = "/url" ,method = RequestMethod.POST)
-    public String create(@RequestBody String prevUrl){
-        // 서비스를 호출 -> 서비스에 대한 인터페이스
-        // Q. 인터페이스가 왜 필요한가?
-        String shortUrl = urlShortenerService.createUrl(prevUrl);
-
-        return shortUrl;
+    public void cntUp(String id){
+        for(ShortenUrl url : urls){
+            if(url.getId().equals(id)){
+                url.setCnt(url.getCnt() + 1);
+            }
+        }
     }
 
-    //		- 생성된 단축 URL로 요청시 원래 URL로 리다이렉트
-    @RequestMapping(path = "/url/{newUrl}", method = RequestMethod.GET)
-    public String search(@PathVariable(value = "newUrl") String newUrl){
-        String prevUrl = urlShortenerService.getUrl(newUrl);
-        return prevUrl;
+    public String createUrl(String prevUrl){
+        // URL인지 확인하는 정규 표현식
+        // URL이 아니면 -> 예외를 던진다.
+
+//        String newUrl = Base58.encode(prevUrl.getBytes());
+
+
+// 중복되는지 체크
+        while (true) {
+            byte[] uuidBinary = UUID.randomUUID().toString().getBytes();
+            String newUrl = Base58.encode(uuidBinary);
+
+            if(checkUrl(newUrl)) {
+                ShortenUrl entity = new ShortenUrl(prevUrl, newUrl);
+                urls.add(entity);
+            }else{
+                // 랜덤으로 바꿔주는
+            }
+        }
+
+
+        return newUrl;
     }
 
+
+    public String getUrl(String newUrl){
+        ShortenUrl findedUrl = urls.stream()
+                .filter(url -> url.getNewUrl().equals(newUrl))
+                .findFirst()
+                .orElseThrow(() -> new NewUrlNotFoundException());
+
+        findedUrl.countUp();
+
+        return findedUrl.getPrevUrl();
+    }
 };
