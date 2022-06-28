@@ -15,11 +15,15 @@ public class ShortenUrl {
     private String newUrl;
     private int cnt;
 
-    public ShortenUrl(String prevUrl, String newUrl, int cnt){
+    public ShortenUrl(String prevUrl, String newUrl ){
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.prevUrl = prevUrl;
         this.newUrl = newUrl;
-        this.cnt = cnt;
+        this.cnt = 1;
+    }
+
+    public void countUp() {
+        this.cnt = this.cnt + 1;
     }
 
 };
