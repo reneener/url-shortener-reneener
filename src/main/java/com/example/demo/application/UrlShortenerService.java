@@ -12,8 +12,13 @@ public class UrlShortenerService {
         this.ShortenUrlListRepository = ShortenUrlListRepository;
     }
 
-    public String create(String prevUrl){
+    public String createUrl(String prevUrl){
+        String newUrl = ShortenUrlListRepository.createUrl(prevUrl);
+        return newUrl;
+    }
 
-        return "";
+    public String getUrl(String newUrl){
+        String prevUrl = ShortenUrlListRepository.getUrl(newUrl);
+        return prevUrl;
     }
 };

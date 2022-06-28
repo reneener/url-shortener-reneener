@@ -25,12 +25,16 @@ public class UrlShortenerController {
     public String create(@RequestBody String prevUrl){
         // 서비스를 호출 -> 서비스에 대한 인터페이스
         // Q. 인터페이스가 왜 필요한가?
-        String shortUrl = urlShortenerService.create(prevUrl);
+        String shortUrl = urlShortenerService.createUrl(prevUrl);
 
         return shortUrl;
     }
 
     //		- 생성된 단축 URL로 요청시 원래 URL로 리다이렉트
-//    @RequestMapping(path = "/url/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/url/{newUrl}", method = RequestMethod.GET)
+    public String search(@PathVariable(value = "newUrl") String newUrl){
+        String prevUrl = urlShortenerService.getUrl(newUrl);
+        return prevUrl;
+    }
 
 };
