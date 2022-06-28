@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Base58 {
 
@@ -28,6 +29,9 @@ public class Base58 {
      * @return the base58-encoded string. empty string if {@code input} is empty or null.
      */
     public static String encode(final byte[] input) {
+//        BASE58_CHARS[new Random().nextInt(BASE58_CHARS.length) - 1];
+//         -> dJ7
+
         if (null == input || input.length == 0) {
             return "";
         }
