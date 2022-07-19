@@ -1,6 +1,6 @@
 package com.example.demo.presentation;
 
-import com.example.demo.domain.NewUrlNotFoundException;
+import com.example.demo.domain.exception.NewUrlNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
