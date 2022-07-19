@@ -22,12 +22,10 @@ public class ShortenUrlListRepository {
         return false;
     }
 
-    public void createUrl(String destination, String newUrl){
+    public void createUrl(ShortenUrl shortenUrl){
         // URL인지 확인하는 정규 표현식
         // URL이 아니면 -> 예외를 던진다.
-
-         ShortenUrl entity = new ShortenUrl(destination, newUrl);
-         urls.add(entity);
+         urls.add(shortenUrl);
 
          System.out.println("entity save");
     }

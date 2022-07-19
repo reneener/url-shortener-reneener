@@ -1,5 +1,6 @@
 package com.example.demo.application;
 
+import com.example.demo.domain.ShortenUrl;
 import com.example.demo.infrastructure.ShortenUrlListRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,42 +17,41 @@ public class UrlShortenerService {
 
     private ShortenUrlListRepository shortenUrlListRepository;
 
-    public UrlShortenerService(ShortenUrlListRepository ShortenUrlListRepository){
-        this.shortenUrlListRepository = ShortenUrlListRepository;
+    public UrlShortenerService(ShortenUrlListRepository shortenUrlListRepository){
+        this.shortenUrlListRepository = shortenUrlListRepository;
     }
 
-    public boolean isDuplicated(String newUrl){
-         if(shortenUrlListRepository.checkUrl(newUrl))
-             return false;
-         else
-             return true;
-    }
-    public static boolean isUrl(String text) {
-        Pattern p = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?[a-zA-Z0-9./]+$");
-        Matcher m = p.matcher(text);
-        if(m.matches())
-            return true;
-        else
-            return false;
-    }
+    public String createUrl(String destination) {
+        checkValidation(destination);
 
-    public String createUrl(String prevUrl) {
-        String newUrl = "";
-        if (isUrl(prevUrl)){//URL형식확인
-            newUrl = UUID.randomUUID().toString().substring(0, 7); //랜덤 문자열 생성
-            while (true) { //중복인지 확인
-                if (!isDuplicated(newUrl)) {
-                    shortenUrlListRepository.createUrl(prevUrl, newUrl);
-                    return newUrl;
-                }
+        String newUrl = UUID.randomUUID().toString().substring(0, 7); //랜덤 문자열 생성
+
+        while (true) { //중복인지 확인
+            if (!isDuplicated(newUrl)) {
+                ShortenUrl shortenUrl = new ShortenUrl(destination, newUrl);
+                shortenUrlListRepository.createUrl(shortenUrl);
+                return newUrl;
             }
-        }else {
-            throw new IllegalArgumentException("URL 형식이 맞지 않습니다.");
         }
     }
 
     public String getUrl(String newUrl){
-        String prevUrl = shortenUrlListRepository.searchUrl(newUrl);
-        return prevUrl;
+        String destination = shortenUrlListRepository.searchUrl(newUrl);
+        return destination;
+    }
+
+    private boolean isDuplicated(String newUrl){
+        if(shortenUrlListRepository.checkUrl(newUrl))
+            return false;
+        else
+            return true;
+    }
+
+    private void checkValidation(String text) {
+        Pattern p = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?[a-zA-Z0-9./]+$");
+        Matcher m = p.matcher(text);
+
+        if(Boolean.FALSE == m.matches())
+            throw new IllegalArgumentException("URL 형식이 맞지 않습니다.");
     }
 };

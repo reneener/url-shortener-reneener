@@ -30,8 +30,8 @@ public class UrlShortenerController {
     //		- 생성된 단축 URL로 요청시 원래 URL로 리다이렉트
     @RequestMapping(path = "/url/{newUrl}", method = RequestMethod.GET)
     public String search(@PathVariable(value = "newUrl") String newUrl){
-        String prevUrl = urlShortenerService.getUrl(newUrl);
-        return prevUrl;
+        String destination = urlShortenerService.getUrl(newUrl);
+        return destination;
     }
 
 };
