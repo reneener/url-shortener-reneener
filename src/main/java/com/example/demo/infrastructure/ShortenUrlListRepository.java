@@ -2,6 +2,7 @@ package com.example.demo.infrastructure;
 
 import com.example.demo.domain.exception.NewUrlNotFoundException;
 import com.example.demo.domain.ShortenUrl;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 // Repository는 데이터를 저장/조회하는 일만 해야함
 
+@Profile("list")
 @Repository
 public class ShortenUrlListRepository implements ShortenUrlRepository{
 
