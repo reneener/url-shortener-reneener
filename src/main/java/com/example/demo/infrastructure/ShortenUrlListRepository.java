@@ -2,6 +2,7 @@ package com.example.demo.infrastructure;
 
 import com.example.demo.domain.exception.NewUrlNotFoundException;
 import com.example.demo.domain.ShortenUrl;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -10,9 +11,25 @@ import java.util.List;
 // Repository는 데이터를 저장/조회하는 일만 해야함
 
 @Repository
-public class ShortenUrlListRepository {
+@Primary
+public class ShortenUrlListRepository implements ShortenUrlRepository{
 
     private List<ShortenUrl> urls = new ArrayList<>();
+
+    public void createShortenUrl(ShortenUrl shortenUrl) {
+        urls.add(shortenUrl);
+    }
+
+    public String getDestination (String newUrl){ // 리다이렉트
+        ShortenUrl findedUrl = urls.stream()
+                .filter(url -> url.getNewUrl().equals(newUrl))
+                .findFirst()
+                .orElseThrow(() -> new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다."));
+
+
+        findedUrl.countUp();
+        return findedUrl.getDestination();
+    }
 
     public boolean checkUrl(String newUrl){
         for(ShortenUrl url : urls){
@@ -22,24 +39,13 @@ public class ShortenUrlListRepository {
         return false;
     }
 
-    public void createUrl(String destination, String newUrl){
-        // URL인지 확인하는 정규 표현식
-        // URL이 아니면 -> 예외를 던진다.
-
-         ShortenUrl entity = new ShortenUrl(destination, newUrl);
-         urls.add(entity);
-
-         System.out.println("entity save");
-    }
-
-    public String searchUrl(String newUrl){
+    public String getNewUrl(String destination){ //중복 확인
         ShortenUrl findedUrl = urls.stream()
-                .filter(url -> url.getNewUrl().equals(newUrl))
+                .filter(url -> url.getNewUrl().equals(destination))
                 .findFirst()
-                .orElseThrow(() -> new NewUrlNotFoundException("url 정보를 찾을 수 없습니다."));
+                .orElse(null);
 
-        findedUrl.countUp();
-        findedUrl.toString();
-        return findedUrl.getDestination();
+        return findedUrl.getNewUrl();
     }
+
 };
