@@ -8,5 +8,4 @@ public interface ShortenUrlRepository {
     void createShortenUrl(ShortenUrl url);
     String getDestination (String newUrl);
     boolean checkUrl(String newUrl);
-    String getNewUrl(String destination);
 }

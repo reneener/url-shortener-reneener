@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+<<<<<<< HEAD
 import com.example.demo.application.UrlShortenerService;
 import com.example.demo.domain.ShortenUrl;
 import com.example.demo.presentation.UrlShortenerController;
@@ -40,4 +41,7 @@ public class UrlShortenerControllerTest {
         ).andExpect(status().isOk());
     }
 
+=======
+public class UrlShortenerControllerTest {
+>>>>>>> 38baed91c446b4ad6b0e809ad930dee68cbd0631
 }
