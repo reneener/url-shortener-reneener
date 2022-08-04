@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
 import com.example.demo.application.UrlShortenerService;
+
 import com.example.demo.domain.ShortenUrl;
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.NewUrlNotFoundException;
 import com.example.demo.domain.exception.UrlFormatException;
 import com.example.demo.infrastructure.ShortenUrlRepository;
 import org.junit.jupiter.api.DisplayName;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +32,6 @@ import static org.mockito.Mockito.when;
 4.
 
 */
-
 
 @ExtendWith(MockitoExtension.class)
 public class ShortenUrlServiceUnitTest {

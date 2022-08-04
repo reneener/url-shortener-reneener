@@ -4,6 +4,7 @@ import com.example.demo.domain.ShortenUrl;
 
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.UrlFormatException;
+
 import com.example.demo.infrastructure.ShortenUrlRepository;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
@@ -24,12 +25,14 @@ public class UrlShortenerService {
         int count = 0;
         while (count++ < 10) {
             if (notExistedUrl(newUrl)) { //랜덤 문자열 중복 체크
+
                 ShortenUrl shortenUrl = new ShortenUrl(destination, newUrl);
                 shortenUrlRepository.createShortenUrl(shortenUrl);
                 return newUrl;
             }
         }
         throw new ManyDuplicationException("요청 횟수 초과");
+
     }
 
     public String getDestination(String newUrl){// 리다이렉트
@@ -39,8 +42,9 @@ public class UrlShortenerService {
     private boolean notExistedUrl(String newUrl){
         if(shortenUrlRepository.checkUrl(newUrl))
             return false;
+
         else
-            return true;
+            return false;
     }
 
     private String checkValidation(String text) {
