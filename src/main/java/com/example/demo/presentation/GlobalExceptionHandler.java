@@ -1,5 +1,6 @@
 package com.example.demo.presentation;
 
+import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.NewUrlNotFoundException;
 import com.example.demo.domain.exception.UrlFormatException;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity(null, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ManyDuplicationException.class)
+    public ResponseEntity handleFormatException(ManyDuplicationException e) {
+        return new ResponseEntity(null, HttpStatus.REQUEST_TIMEOUT);
+    }
+
     @ExceptionHandler(UrlFormatException.class)
     public ResponseEntity handleFormatException(UrlFormatException e) {
         return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleAllException(Exception e) {

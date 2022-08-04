@@ -29,13 +29,13 @@ public class ShortenUrlMapRepository implements ShortenUrlRepository{
     }
 
     public String getDestination (String newUrl){ // 리다이렉트
-        ShortenUrl findUrl = urls.get(newUrl);
-
-        if(findUrl == null)
-            new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다.");
-
-        findUrl.countUp();
-        return findUrl.getDestination();
+        for(ShortenUrl url : urls.values()){
+            if(url.getNewUrl().equals(newUrl)){
+                url.countUp();
+                return url.getDestination();
+            }
+        }
+        throw new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다.");
     }
 
 
