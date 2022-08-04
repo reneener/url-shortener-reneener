@@ -11,7 +11,6 @@ public class UrlShortenerController {
     //		- 생성된 단축 URL로 요청시 원래 URL로 리다이렉트
     private UrlShortenerService urlShortenerService;
 
-    @Autowired
     public UrlShortenerController(UrlShortenerService urlShortenerService) {
         this.urlShortenerService = urlShortenerService;
     }

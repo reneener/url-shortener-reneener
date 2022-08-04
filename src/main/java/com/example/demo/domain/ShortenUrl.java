@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +15,7 @@ public class ShortenUrl {
     private String newUrl;
     private int cnt;
 
-
+    @Builder
     public ShortenUrl(String destination, String newUrl){
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.destination = destination;

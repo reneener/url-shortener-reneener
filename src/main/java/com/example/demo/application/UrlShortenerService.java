@@ -4,15 +4,8 @@ import com.example.demo.domain.ShortenUrl;
 
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.UrlFormatException;
-import com.example.demo.infrastructure.ShortenUrlListRepository;
-import com.example.demo.infrastructure.ShortenUrlMapRepository;
-import com.example.demo.infrastructure.ShortenUrlRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
+import com.example.demo.domain.ShortenUrlRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,17 +21,16 @@ public class UrlShortenerService {
 
     public String createUrl(String destination) { //단축 url 생성
         checkValidation(destination);
-        String newUrl = UUID.randomUUID().toString().substring(0, 7); //랜덤 문자열 생성
-
+        String newUrl =  UUID.randomUUID().toString().substring(0, 7);
         int count = 0;
+
         while (count++ < 10) {
-            if (!isDuplicated(newUrl)) { //랜덤 문자열 중복 체크
+            if (notExistedUrl(newUrl)) { //랜덤 문자열 중복 체크
                 ShortenUrl shortenUrl = new ShortenUrl(destination, newUrl);
                 shortenUrlRepository.createShortenUrl(shortenUrl);
                 return newUrl;
             }
         }
-
         throw new ManyDuplicationException("요청 횟수 초과");
     }
 
@@ -46,15 +38,15 @@ public class UrlShortenerService {
         return shortenUrlRepository.getDestination(newUrl);
     }
 
-    private boolean isDuplicated(String newUrl){
+    private boolean notExistedUrl(String newUrl){
         if(shortenUrlRepository.checkUrl(newUrl))
-            return true;
+            return false;
         else
             return true;
     }
 
     private void checkValidation(String text) {
-        Pattern p = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?[a-zA-Z0-9./]+$");
+        Pattern p = Pattern.compile("^((http|https)://)?(www.)?([a-zA-Z0-9]+)\\.[a-z]+([a-zA-Z0-9.?#]+)?");
         Matcher m = p.matcher(text);
 
         if(Boolean.FALSE == m.matches())
