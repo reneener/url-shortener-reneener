@@ -28,28 +28,15 @@ public class ShortenUrlMapRepository implements ShortenUrlRepository{
     }
 
     public String getDestination (String newUrl){ // 리다이렉트
-        ShortenUrl findUrl = urls.get(newUrl);
+        for(ShortenUrl url : urls.values()){
+            if(url.getNewUrl().equals(newUrl)){
+                url.countUp();
+                return url.getDestination();
+            }
+        }
+        throw new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다.");
 
-        if(findUrl == null)
-            new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다.");
-
-//        Optional<ShortenUrl> findUrl = Optional.ofNullable(urls.entrySet().stream()
-//                .filter(url -> url.getValue().getNewUrl().equals(newUrl))
-//                .map(Map.Entry::getValue)
-//                .findFirst()
-//                .orElseThrow(() -> new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다.")));
-
-        findUrl.countUp();
-        return findUrl.getDestination();
     }
 
-    public String getNewUrl(String destination){ //중복 확인
-        Optional<ShortenUrl> findUrl = urls.entrySet().stream()
-                .filter(url -> url.getKey().equals(destination))
-                .map(Map.Entry::getValue)
-                .findFirst();
-
-        return findUrl.get().getNewUrl();
-    }
 
 };

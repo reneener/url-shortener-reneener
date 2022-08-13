@@ -1,12 +1,12 @@
 package com.example.demo.application;
 
 import com.example.demo.domain.ShortenUrl;
+
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.UrlFormatException;
-import com.example.demo.infrastructure.ShortenUrlListRepository;
+
 import com.example.demo.infrastructure.ShortenUrlRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,43 +21,40 @@ public class UrlShortenerService {
     }
 
     public String createUrl(String destination) { //단축 url 생성
-        checkValidation(destination);
-        //checkDestination(destination); 같은 url요청인 경우 중복 체크하여 이전에 만들었던 newUrl 반환해야함
-        String newUrl = UUID.randomUUID().toString().substring(0, 7); //랜덤 문자열 생성
-
+        String newUrl = checkValidation(destination);
         int count = 0;
-        while (count++ < 5) {
-            if (!isDuplicated(newUrl)) { //랜덤 문자열 중복 체크
+        while (count++ < 10) {
+            if (notExistedUrl(newUrl)) { //랜덤 문자열 중복 체크
+
                 ShortenUrl shortenUrl = new ShortenUrl(destination, newUrl);
                 shortenUrlRepository.createShortenUrl(shortenUrl);
                 return newUrl;
             }
         }
+        throw new ManyDuplicationException("요청 횟수 초과");
 
-        throw new ManyDuplicationException();
     }
 
     public String getDestination(String newUrl){// 리다이렉트
         return shortenUrlRepository.getDestination(newUrl);
     }
 
-    private void getNewUrl(String destination){
-        //return shortenUrlListRepository.getNewUrl();
-    }
-
-    private boolean isDuplicated(String newUrl){
+    private boolean notExistedUrl(String newUrl){
         if(shortenUrlRepository.checkUrl(newUrl))
-            return true;
+            return false;
+
         else
             return false;
     }
 
-    private void checkValidation(String text) {
-        Pattern p = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?[a-zA-Z0-9./]+$");
+    private String checkValidation(String text) {
+        Pattern p = Pattern.compile("^((http|https)://)?(www.)?([a-zA-Z0-9]+)\\.[a-z]+([a-zA-Z0-9.?#]+)?");
         Matcher m = p.matcher(text);
 
         if(Boolean.FALSE == m.matches())
             throw new UrlFormatException("URL 형식이 맞지 않습니다.");
+
+       return UUID.randomUUID().toString().substring(0, 7);
     }
 
 }

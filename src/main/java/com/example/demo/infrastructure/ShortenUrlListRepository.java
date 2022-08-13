@@ -24,7 +24,7 @@ public class ShortenUrlListRepository implements ShortenUrlRepository{
         ShortenUrl findedUrl = urls.stream()
                 .filter(url -> url.getNewUrl().equals(newUrl))
                 .findFirst()
-                .orElseThrow(() -> new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NewUrlNotFoundException("생성한 단축 url을 찾을 수 없습니다."));
 
         findedUrl.countUp();
         return findedUrl.getDestination();
@@ -33,18 +33,9 @@ public class ShortenUrlListRepository implements ShortenUrlRepository{
     public boolean checkUrl(String newUrl){
         for(ShortenUrl url : urls){
             if(url.getNewUrl().equals(newUrl))
-                return true;
+                return true; //이미 저장된 url
         }
         return false;
-    }
-
-    public String getNewUrl(String destination){ //중복 확인
-        ShortenUrl findedUrl = urls.stream()
-                .filter(url -> url.getNewUrl().equals(destination))
-                .findFirst()
-                .orElse(null);
-
-        return findedUrl.getNewUrl();
     }
 
 };

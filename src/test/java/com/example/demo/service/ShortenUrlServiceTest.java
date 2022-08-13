@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @SpringBootTest
 public class ShortenUrlServiceTest {
@@ -14,18 +15,14 @@ public class ShortenUrlServiceTest {
     UrlShortenerService urlShortenerService;
 
     @Test
-    void createUrlTest() {
-        String expectedDestination = "https://www.naver.com/";
+    void shortenUrlTest() { // create와 getDestination 모두 테스트
+        String requestUrl = "https://www.naver.com";
 
-        String newUrl = urlShortenerService.createUrl(expectedDestination);
+        String newUrl = urlShortenerService.createUrl(requestUrl);
         String destination = urlShortenerService.getDestination(newUrl);
 
-        assertTrue(expectedDestination.equals(destination));
+        assertTrue(destination.equals(requestUrl));
     }
-//
-//    @Test
-//    void getUrl() {
-//
-//    }
+
 
 }
