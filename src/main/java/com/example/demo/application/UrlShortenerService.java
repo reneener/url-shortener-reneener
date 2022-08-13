@@ -4,7 +4,12 @@ import com.example.demo.domain.ShortenUrl;
 
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.UrlFormatException;
+<<<<<<< HEAD
 import com.example.demo.domain.ShortenUrlRepository;
+=======
+
+import com.example.demo.infrastructure.ShortenUrlRepository;
+>>>>>>> 7ab7ad26cda9b460bb5218a01dd7649222b11bdc
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -22,6 +27,7 @@ public class UrlShortenerService {
     public String createUrl(String destination) { //단축 url 생성
         checkValidation(destination);
         String newUrl =  UUID.randomUUID().toString().substring(0, 7);
+
         int count = 0;
 
         while (count++ < 10) {
@@ -32,6 +38,7 @@ public class UrlShortenerService {
             }
         }
         throw new ManyDuplicationException("요청 횟수 초과");
+
     }
 
     public String getDestination(String newUrl){// 리다이렉트

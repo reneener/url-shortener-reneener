@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Profile("map")
 @Repository
 public class ShortenUrlMapRepository implements ShortenUrlRepository {
@@ -37,6 +36,5 @@ public class ShortenUrlMapRepository implements ShortenUrlRepository {
         }
         throw new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다.");
     }
-
 
 };
