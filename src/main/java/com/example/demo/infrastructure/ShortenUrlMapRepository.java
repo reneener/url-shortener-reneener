@@ -1,17 +1,17 @@
 package com.example.demo.infrastructure;
 
 import com.example.demo.domain.ShortenUrl;
+import com.example.demo.domain.ShortenUrlRepository;
 import com.example.demo.domain.exception.NewUrlNotFoundException;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Profile("map")
 @Repository
-public class ShortenUrlMapRepository implements ShortenUrlRepository{
+public class ShortenUrlMapRepository implements ShortenUrlRepository {
 
     private Map<String, ShortenUrl> urls = new HashMap<>();
 
@@ -35,8 +35,6 @@ public class ShortenUrlMapRepository implements ShortenUrlRepository{
             }
         }
         throw new NewUrlNotFoundException("이전 url 정보를 찾을 수 없습니다.");
-
     }
-
 
 };

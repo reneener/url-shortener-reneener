@@ -4,8 +4,12 @@ import com.example.demo.domain.ShortenUrl;
 
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.UrlFormatException;
+<<<<<<< HEAD
+import com.example.demo.domain.ShortenUrlRepository;
+=======
 
 import com.example.demo.infrastructure.ShortenUrlRepository;
+>>>>>>> 7ab7ad26cda9b460bb5218a01dd7649222b11bdc
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -21,11 +25,13 @@ public class UrlShortenerService {
     }
 
     public String createUrl(String destination) { //단축 url 생성
-        String newUrl = checkValidation(destination);
+        checkValidation(destination);
+        String newUrl =  UUID.randomUUID().toString().substring(0, 7);
+
         int count = 0;
+
         while (count++ < 10) {
             if (notExistedUrl(newUrl)) { //랜덤 문자열 중복 체크
-
                 ShortenUrl shortenUrl = new ShortenUrl(destination, newUrl);
                 shortenUrlRepository.createShortenUrl(shortenUrl);
                 return newUrl;
@@ -42,19 +48,16 @@ public class UrlShortenerService {
     private boolean notExistedUrl(String newUrl){
         if(shortenUrlRepository.checkUrl(newUrl))
             return false;
-
         else
-            return false;
+            return true;
     }
 
-    private String checkValidation(String text) {
+    private void checkValidation(String text) {
         Pattern p = Pattern.compile("^((http|https)://)?(www.)?([a-zA-Z0-9]+)\\.[a-z]+([a-zA-Z0-9.?#]+)?");
         Matcher m = p.matcher(text);
 
         if(Boolean.FALSE == m.matches())
             throw new UrlFormatException("URL 형식이 맞지 않습니다.");
-
-       return UUID.randomUUID().toString().substring(0, 7);
     }
 
 }

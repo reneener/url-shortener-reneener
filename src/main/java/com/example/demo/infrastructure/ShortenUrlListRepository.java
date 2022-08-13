@@ -1,5 +1,6 @@
 package com.example.demo.infrastructure;
 
+import com.example.demo.domain.ShortenUrlRepository;
 import com.example.demo.domain.exception.NewUrlNotFoundException;
 import com.example.demo.domain.ShortenUrl;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Profile("list")
 @Repository
-public class ShortenUrlListRepository implements ShortenUrlRepository{
+public class ShortenUrlListRepository implements ShortenUrlRepository {
 
     private List<ShortenUrl> urls = new ArrayList<>();
 
