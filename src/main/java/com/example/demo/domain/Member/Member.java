@@ -1,6 +1,6 @@
 package com.example.demo.domain.Member;
 
-import com.example.demo.domain.ShortenUrl;
+import com.example.demo.domain.ShortenUrl.ShortenUrl;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,9 @@ public class Member {
 	@Column(name = "ID")
 	private Long id;
 
-	private String userId;
+	@Email
+	@Column(name="MEMBER_ID")
+	private String memberId;
 
 	private String name;
 

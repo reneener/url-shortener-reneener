@@ -1,4 +1,4 @@
-package com.example.demo.domain;
+package com.example.demo.domain.ShortenUrl;
 
 import com.example.demo.domain.Member.Member;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ public class ShortenUrl {
     private String newUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="MEMBER_ID")
+    @JoinColumn(name="member_id")
     private Member member;
 
     private int cnt;

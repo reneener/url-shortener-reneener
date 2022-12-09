@@ -1,10 +1,10 @@
 package com.example.demo.application;
 
-import com.example.demo.domain.ShortenUrl;
+import com.example.demo.domain.ShortenUrl.ShortenUrl;
 
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.UrlFormatException;
-import com.example.demo.domain.ShortenUrlRepository;
+import com.example.demo.domain.ShortenUrl.ShortenUrlRepository;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.regex.Matcher;
