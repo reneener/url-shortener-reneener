@@ -14,8 +14,6 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
 
 @Getter
-@Setter
-@ToString
 @Entity
 public class ShortenUrl {
 
