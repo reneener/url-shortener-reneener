@@ -1,0 +1,46 @@
+#default
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - common
+      prod:
+        - common
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+# mySql
+datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/url_shortner?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+  username: root
+  password: root
+
+## redis
+  redis:
+    host: localhost
+    port: 6379
+
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
