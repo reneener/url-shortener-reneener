@@ -31,7 +31,7 @@ public class UrlShortenerController {
 
     //		- 생성된 단축 URL로 요청시 원래 URL로 리다이렉트
     @RequestMapping(path = "/url/{newUrl}", method = RequestMethod.GET)
-    public String get(@PathVariable(value = "newUrl") String newUrl){
+    public String search(@PathVariable(value = "newUrl") String newUrl){
         String destination = urlShortenerService.getDestination(newUrl);
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         //ops.get("key");

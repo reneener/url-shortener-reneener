@@ -1,5 +1,6 @@
 package com.example.demo.domain.ShortenUrl;
 
+import com.example.demo.domain.Audit;
 import com.example.demo.domain.Member.Member;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,16 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Entity
-public class ShortenUrl {
+public class ShortenUrl extends Audit {
 
     @Id @GeneratedValue
-    private long id;
+    private Long id;
 
     @URL
     private String destination;

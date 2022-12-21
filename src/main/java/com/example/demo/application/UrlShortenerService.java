@@ -28,7 +28,7 @@ public class UrlShortenerService {
         while (count++ < 10) {
             if (notExistedUrl(newUrl)) { //랜덤 문자열 중복 체크
                 ShortenUrl shortenUrl = new ShortenUrl(destination, newUrl);
-                shortenUrlRepository.createShortenUrl(shortenUrl);
+                shortenUrlRepository.save(shortenUrl);
                 return newUrl;
             }
         }

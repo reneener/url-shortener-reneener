@@ -1,5 +1,6 @@
 package com.example.demo.domain.Member;
 
+import com.example.demo.domain.Audit;
 import com.example.demo.domain.ShortenUrl.ShortenUrl;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter
-public class Member {
+public class Member extends Audit {
 
 	@Id
 	@GeneratedValue
