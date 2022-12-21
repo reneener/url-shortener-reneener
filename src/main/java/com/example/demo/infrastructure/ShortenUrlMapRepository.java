@@ -9,13 +9,13 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.Map;
 
-@Profile("map")
+//@Profile("map")
 @Repository
 public class ShortenUrlMapRepository implements ShortenUrlRepository {
 
     private Map<String, ShortenUrl> urls = new HashMap<>();
 
-    public void createShortenUrl(ShortenUrl shortenUrl) {
+    public void createUrl(ShortenUrl shortenUrl) {
         urls.put(shortenUrl.getDestination(), shortenUrl);
     }
 

@@ -11,13 +11,13 @@ import java.util.List;
 
 // Repository는 데이터를 저장/조회하는 일만 해야함
 
-@Profile("list")
-@Repository
+//@Profile("list")
+//@Repository
 public class ShortenUrlListRepository implements ShortenUrlRepository {
 
     private List<ShortenUrl> urls = new ArrayList<>();
 
-    public void createShortenUrl(ShortenUrl shortenUrl) {
+    public void createUrl(ShortenUrl shortenUrl) {
         urls.add(shortenUrl);
     }
 
