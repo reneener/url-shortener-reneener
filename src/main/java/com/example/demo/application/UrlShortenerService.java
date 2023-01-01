@@ -3,56 +3,47 @@ package com.example.demo.application;
 import com.example.demo.domain.ShortenUrl.ShortenUrl;
 
 import com.example.demo.domain.exception.ManyDuplicationException;
-import com.example.demo.domain.exception.UrlFormatException;
 import com.example.demo.domain.ShortenUrl.ShortenUrlRepository;
+import java.util.Objects;
+import java.util.Optional;
+import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service // UrlShortenerService 빈이 생성이 되어 관리된다.
+@Slf4j
+@RequiredArgsConstructor
 public class UrlShortenerService {
 
-    private ShortenUrlRepository shortenUrlRepository;
+    private final ShortenUrlRepository shortenUrlRepository;
+    private final Base62Service base62Service;
 
-    public UrlShortenerService(ShortenUrlRepository shortenUrlRepository){
-        this.shortenUrlRepository = shortenUrlRepository;
-    }
-
+    @Value("${url.shortener.base.url}")
+    private String baseUrl;
     public String createUrl(String destination) { //단축 url 생성
-        checkValidation(destination);
-        String newUrl =  UUID.randomUUID().toString().substring(0, 7);
 
-        int count = 0;
-
-        while (count++ < 10) {
-            if (notExistedUrl(newUrl)) { //랜덤 문자열 중복 체크
-                ShortenUrl shortenUrl = new ShortenUrl(destination, newUrl);
-                shortenUrlRepository.createUrl(shortenUrl);
-                return newUrl;
-            }
-        }
-        throw new ManyDuplicationException("요청 횟수 초과");
-
+        ShortenUrl shortenUrl = ShortenUrl.builder()
+                .destination(destination)
+                .build();
+        shortenUrlRepository.save(shortenUrl);
+        return setEncodedUrl(shortenUrl);
     }
 
+    public String setEncodedUrl(ShortenUrl shortenUrl){
+        String encodedId = base62Service.encodedId(shortenUrl.getId());
+        shortenUrl.setNewUrl(encodedId); //이렇게 하면 db도 자동업데이트가 되나??
+        return encodedId;
+    }
     public String getDestination(String newUrl){// 리다이렉트
-        return shortenUrlRepository.getDestination(newUrl);
+        return decodingId(newUrl).getDestination();
+    }
+    public ShortenUrl decodingId (String encodedId){
+        Long decodedId =  base62Service.decodedId(encodedId);
+        return shortenUrlRepository.findById(decodedId).orElse(null);
     }
 
-    private boolean notExistedUrl(String newUrl){
-        if(shortenUrlRepository.checkUrl(newUrl))
-            return false;
-        else
-            return true;
-    }
 
-    private void checkValidation(String text) {
-        Pattern p = Pattern.compile("^((http|https)://)?(www.)?([a-zA-Z0-9]+)\\.[a-z]+([a-zA-Z0-9.?#]+)?");
-        Matcher m = p.matcher(text);
-
-        if(Boolean.FALSE == m.matches())
-            throw new UrlFormatException("URL 형식이 맞지 않습니다.");
-    }
 
 }
