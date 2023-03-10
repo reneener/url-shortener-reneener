@@ -51,3 +51,8 @@ spring:
   config:
     activate:
       on-profile: prod
+
+url:
+  shortener:
+    base:
+      url: http://localhost:8080/url/
