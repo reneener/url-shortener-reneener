@@ -16,7 +16,6 @@ public class Base62Service {
 	public String encodedId(String destination){
 		return new String(base62Instance.encode(destination.getBytes()));
 	}
-
 	public Long decodedId(String encodedId){
 		String id = new String(base62Instance.decode(encodedId.getBytes()));
 		return Long.valueOf(id);
