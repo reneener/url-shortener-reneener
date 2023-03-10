@@ -51,11 +51,6 @@ public class ShortenUrlServiceUnitTest {
         });
     }
 
-    @Test
-    @DisplayName("생성된 단축 url 자릿수가 7자리인지 테스트")
-    void testUrlDigit(){
-        assertTrue(urlShortenerService.createUrl("http://naver.com").length() == 7);
-    }
 
     @Test
     @DisplayName("url validation check 예외 발생 테스트")

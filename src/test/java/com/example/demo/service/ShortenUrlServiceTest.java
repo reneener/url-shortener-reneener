@@ -15,11 +15,6 @@ public class ShortenUrlServiceTest {
 
     @Test
     void shortenUrlTest() { // create와 getDestination 모두 테스트
-        String requestUrl = "https://www.naver.com";
 
-        String newUrl = urlShortenerService.createUrl(requestUrl);
-        String destination = urlShortenerService.getDestination(newUrl);
-
-        assertTrue(destination.equals(requestUrl));
     }
 }

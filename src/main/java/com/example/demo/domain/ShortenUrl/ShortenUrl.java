@@ -1,11 +1,9 @@
 package com.example.demo.domain.ShortenUrl;
-
 import com.example.demo.domain.Audit;
-import com.example.demo.domain.Member.Member;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+<<<<<<< Updated upstream
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Builder;
@@ -14,6 +12,18 @@ import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Entity
+=======
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity(name = "url")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+>>>>>>> Stashed changes
 public class ShortenUrl extends Audit {
 
     @Id @GeneratedValue
@@ -30,6 +40,7 @@ public class ShortenUrl extends Audit {
     private Member member;
 
     private int cnt;
+<<<<<<< Updated upstream
 
     @Builder
     public ShortenUrl(String destination, String newUrl){
@@ -50,4 +61,9 @@ public class ShortenUrl extends Audit {
         this.cnt = this.cnt + 1;
     }
 
+=======
+    public void cntUp() {
+        this.cnt = this.cnt + 1;
+    }
+>>>>>>> Stashed changes
 };
