@@ -8,7 +8,6 @@ public class ShortenUrlDto {
 	private Long id;
 	private String destination;
 	private String newUrl;
-
 	public static ShortenUrlDto fromEntity(ShortenUrl shortenUrl){
 		return new ShortenUrlDto(
 			shortenUrl.getId(),
