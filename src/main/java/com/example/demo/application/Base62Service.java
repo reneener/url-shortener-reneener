@@ -14,7 +14,8 @@ public class Base62Service {
 	private static final Base62 base62Instance = Base62.createInstance();
 
 	public String encodedId(String destination){
-		return new String(base62Instance.encode(destination.getBytes()));
+		String newUrl = new String(base62Instance.encode(destination.getBytes()));
+		return newUrl;
 	}
 	public Long decodedId(String encodedId){
 		String id = new String(base62Instance.decode(encodedId.getBytes()));

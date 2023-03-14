@@ -1,58 +1,23 @@
-#default
-spring:
-  profiles:
-    active: local
-    group:
-      local:
-        - common
-      prod:
-        - common
-#jpa
-  jpa:
+spring.jpa:
+  database: mysql
+  hibernate:
+    dialect: org.hibernate.dialect.MySQL8Dialect
+    ddl-auto: update
+  properties:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      format_sql: true
+  show-sql: true
 
-## redis
-  redis:
-    host: localhost
-    port: 6379
+spring.datasource:
+  hikari.maximum-pool-size: 4
+  url: jdbc:mysql://localhost:3306/url_shortner?rewriteBatchedStatements=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+  username: root
+  password: root
+  driver-class-name: com.mysql.cj.jdbc.Driver
 
 
----
+demo:
+  base-url: http://localhost:8080/
 
-spring:
-  config:
-    activate:
-      on-profile: common
 
----
 
-spring:
-  config:
-    activate:
-      on-profile: local
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/url_shortner
-    username: root #나중에 환경변수로 변경할 것 !!!
-    password: root
-  redis:
-    host: localhost
-    port: 6379
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-url:
-  shortener:
-    base:
-      url: http://localhost:8080/url/
