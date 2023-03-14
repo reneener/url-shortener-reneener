@@ -1,6 +1,5 @@
 package com.example.demo.domain.ShortenUrl;
 
-import com.example.demo.domain.Audit;
 import java.sql.Timestamp;
 import java.time.Instant;
 import javax.persistence.Column;
@@ -52,10 +51,8 @@ public class ShortenUrl{
     void updatedAt() {
         this.updatedAt = Timestamp.from(Instant.now());
     }
-
-    private void cntUp() {
+    public void cntUp() {
         this.cnt = this.cnt + 1;
     }
-
 
 }

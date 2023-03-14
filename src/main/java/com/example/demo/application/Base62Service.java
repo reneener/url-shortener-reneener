@@ -13,7 +13,7 @@ public class Base62Service {
 
 	private static final Base62 base62Instance = Base62.createInstance();
 
-	public String encodedId(String destination){
+	public String encoding(String destination){
 		String newUrl = new String(base62Instance.encode(destination.getBytes()));
 		return newUrl;
 	}
