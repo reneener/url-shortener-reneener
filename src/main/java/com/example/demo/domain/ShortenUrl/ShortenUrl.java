@@ -30,7 +30,7 @@ public class ShortenUrl{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "destination")
+    @Column(name = "destination", length = 2100)
     private String destination;
     @Column(name = "new_url")
     private String newUrl;

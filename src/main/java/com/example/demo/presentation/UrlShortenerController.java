@@ -18,20 +18,24 @@ public class UrlShortenerController {
     private final UrlShortenerService urlShortenerService;
 
     @GetMapping(path = "/url")
-    public List<ShortenUrlDto> getAllUrl(){
+    public List<UrlDto> getAllUrl(){
         return urlShortenerService.getShortenUrl();
     }
 
     @PostMapping(path="/url")
     public UrlDto create(@RequestBody UrlDto request){
-        log.error(request.getDestination());
         return urlShortenerService.createUrl(request.getDestination());
     }
 
     @GetMapping(path = "/{newUrl}")
-    public void redirect(@PathVariable String newUrl, HttpServletResponse httpServletResponse)
-        throws IOException {
+    public void redirect(@PathVariable String newUrl, HttpServletResponse httpServletResponse) throws IOException {
         String destination = urlShortenerService.getDestination(newUrl);
         httpServletResponse.sendRedirect(destination);
+    }
+
+    @DeleteMapping(path="/url")
+    public List<UrlDto> delete(@RequestBody UrlDto request){
+        log.error(request.getNewUrl());
+       return urlShortenerService.deleteUrl(request.getNewUrl());
     }
 }

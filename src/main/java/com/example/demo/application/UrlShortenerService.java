@@ -2,6 +2,7 @@ package com.example.demo.application;
 import com.example.demo.domain.ShortenUrl.ShortenUrl;
 import com.example.demo.domain.ShortenUrl.ShortenUrlRepository;
 import com.example.demo.domain.dto.ShortenUrlDto;
+import com.example.demo.domain.exception.AlreadyExistShortenUrlException;
 import com.example.demo.domain.exception.ManyDuplicationException;
 import com.example.demo.domain.exception.NewUrlNotFoundException;
 import com.example.demo.presentation.dto.UrlDto;
@@ -22,14 +23,17 @@ public class UrlShortenerService {
     @Value("${demo.base-url}")
     private String baseUrl;
 
-    public List<ShortenUrlDto> getShortenUrl(){
+    public List<UrlDto> getShortenUrl(){
         return shortenUrlRepository.findAll()
             .stream()
-            .map(ShortenUrlDto::fromEntity)
+            .map(UrlDto::fromUrl)
             .collect(Collectors.toList());
     }
 
     public UrlDto createUrl(String destination) {
+        shortenUrlRepository.findByDestination(destination).ifPresent(it -> {
+            throw new AlreadyExistShortenUrlException("Already exists this URL");
+        });
         String newUrl = generateUniqueUrl(destination);
         ShortenUrl shortenUrl = saveShortenUrl(destination, newUrl);
         return UrlDto.fromUrl(shortenUrl);
@@ -37,9 +41,16 @@ public class UrlShortenerService {
 
     public String getDestination(String newUrl) {
         ShortenUrl shortenUrl = shortenUrlRepository.findByNewUrl(baseUrl + newUrl)
-            .orElseThrow(() -> new NewUrlNotFoundException("Not found request URL: " + newUrl));
+            .orElseThrow(() -> new NewUrlNotFoundException("Not found request URL"));
         shortenUrl.cntUp();
         return shortenUrl.getDestination();
+    }
+
+    public List<UrlDto> deleteUrl(String newUrl){
+        ShortenUrl shortenUrl = shortenUrlRepository.findByNewUrl(newUrl)
+            .orElseThrow(() -> new NewUrlNotFoundException("Not found request URL"));
+        shortenUrlRepository.deleteById(shortenUrl.getId());
+        return getShortenUrl();
     }
 
     private String generateUniqueUrl(String destination) {
