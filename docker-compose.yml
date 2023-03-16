@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  bitly-database:
+    container_name: bitly-database
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: yooyoun/bitly-database
+    environment:
+      - SPRING_PROFILES_ACTIVE= prod
+      - MYSQL_DATABASE=url_shortener
+      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - my-network
+  application:
+    container_name: bitly-app
+    build: .
+    depends_on:
+      - bitly-database
+    links:
+      - bitly-database
+    image: yooyoun/app-backend-bitly
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mysql://bitly-database:3306/url_shortener?rewriteBatchedStatements=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "80:8080"
+    restart: always
+    networks:
+      - my-network
+networks:
+  my-network:
