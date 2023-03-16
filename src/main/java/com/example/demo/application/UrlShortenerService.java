@@ -1,10 +1,9 @@
 package com.example.demo.application;
 import com.example.demo.domain.ShortenUrl.ShortenUrl;
 import com.example.demo.domain.ShortenUrl.ShortenUrlRepository;
-import com.example.demo.domain.dto.ShortenUrlDto;
-import com.example.demo.domain.exception.AlreadyExistShortenUrlException;
-import com.example.demo.domain.exception.ManyDuplicationException;
-import com.example.demo.domain.exception.NewUrlNotFoundException;
+import com.example.demo.presentation.exception.AlreadyExistShortenUrlException;
+import com.example.demo.presentation.exception.ManyDuplicationException;
+import com.example.demo.presentation.exception.NewUrlNotFoundException;
 import com.example.demo.presentation.dto.UrlDto;
 import java.util.List;
 import java.util.stream.Collectors;

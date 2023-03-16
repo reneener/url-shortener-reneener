@@ -1,4 +1,4 @@
-package com.example.demo.domain.exception;
+package com.example.demo.presentation.exception;
 
 public class AlreadyExistShortenUrlException extends RuntimeException{
     public AlreadyExistShortenUrlException(){

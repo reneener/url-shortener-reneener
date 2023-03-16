@@ -35,7 +35,6 @@ public class UrlShortenerController {
 
     @DeleteMapping(path="/url")
     public List<UrlDto> delete(@RequestBody UrlDto request){
-        log.error(request.getNewUrl());
        return urlShortenerService.deleteUrl(request.getNewUrl());
     }
 }

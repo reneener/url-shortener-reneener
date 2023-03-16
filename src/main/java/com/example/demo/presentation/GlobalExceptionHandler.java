@@ -1,9 +1,8 @@
 package com.example.demo.presentation;
 
-import com.example.demo.domain.exception.AlreadyExistShortenUrlException;
-import com.example.demo.domain.exception.ManyDuplicationException;
-import com.example.demo.domain.exception.NewUrlNotFoundException;
-import com.example.demo.domain.exception.UrlFormatException;
+import com.example.demo.presentation.exception.AlreadyExistShortenUrlException;
+import com.example.demo.presentation.exception.ManyDuplicationException;
+import com.example.demo.presentation.exception.NewUrlNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

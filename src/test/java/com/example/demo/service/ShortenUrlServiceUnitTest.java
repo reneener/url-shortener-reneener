@@ -1,70 +1,89 @@
 package com.example.demo.service;
 
+import com.example.demo.application.Base62Service;
 import com.example.demo.application.UrlShortenerService;
 
-import com.example.demo.domain.exception.ManyDuplicationException;
-import com.example.demo.domain.exception.UrlFormatException;
+import com.example.demo.domain.ShortenUrl.ShortenUrl;
+import com.example.demo.presentation.exception.AlreadyExistShortenUrlException;
 import com.example.demo.domain.ShortenUrl.ShortenUrlRepository;
+import com.example.demo.presentation.exception.NewUrlNotFoundException;
+import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
-/*
-
-테스트가 필요한 로직
-1. 단축 url 생성 횟수 초과 (중복) -> 예외발생
-2. 요청 url 형식 확인 -> 예외발생
-3. getDestination 시 이전에 생성한 url이 없을 경우 -> false 리턴
-4.
-
-*/
-
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class ShortenUrlServiceUnitTest {
 
-    @Mock
+    @MockBean
     ShortenUrlRepository shortenUrlRepository;
 
-    @InjectMocks
+    @Autowired
+    Base62Service base62Service;
+    @Autowired
     UrlShortenerService urlShortenerService;
 
     @Test
-    @DisplayName("url 중복 예외 발생 테스트")
-    void testDuplicatedRuntimeException() {
-        //when
-        //테스트 해야할 createUrl에서 repository에 의존을 하므로 중복로직 체크를 true로 가정
-        when(shortenUrlRepository.checkUrl(any())).thenReturn(true); //
+    @DisplayName("shortener url 생성 요청 성공 테스트")
+    void urlCreateTest(){
+        when(shortenUrlRepository.findByDestination(anyString())).thenReturn(Optional.empty());
+        when(shortenUrlRepository.save(any())).thenReturn(mock(ShortenUrl.class));
 
+        Assertions.assertDoesNotThrow(() -> urlShortenerService.createUrl("http://naver.com"));
+    }
+    @Test
+    @DisplayName("이미 있는 destination으로 url create를 요청한 경우 실패 테스트")
+    void testAlreadyExistShortenUrlException() {
+        ShortenUrl existedUrl = mock(ShortenUrl.class);
+        //when
+        when(shortenUrlRepository.findByDestination(any())).thenReturn(Optional.of(existedUrl)); //
         //then
-        //중복시 예외가 발생함을 테스트
-        assertThrows(ManyDuplicationException.class, () -> {
+        assertThrows(AlreadyExistShortenUrlException.class, () -> {
             urlShortenerService.createUrl("https://www.naver.com");
         });
     }
 
+    @Test
+    @DisplayName("shortener url 리다이렉트 성공 테스트")
+    void urlRedirectTest(){
+        when(shortenUrlRepository.findByNewUrl(any())).thenReturn(Optional.of(mock(ShortenUrl.class)));
+
+        Assertions.assertDoesNotThrow( () -> urlShortenerService.getDestination(any()));
+    }
 
     @Test
-    @DisplayName("url validation check 예외 발생 테스트")
-    void testUrlFormatRuntimeException(){
-        assertThrows(UrlFormatException.class, () -> {
-           urlShortenerService.createUrl("kkk");
+    @DisplayName("shortener url로 요청이 왔을 시 destination을 리턴해야하는데 해당 url이 없는 경우 실패 테스트")
+    void testNewUrlNotFoundException(){
+        when(shortenUrlRepository.findByNewUrl((any()))).thenReturn(Optional.empty());
+
+        assertThrows(NewUrlNotFoundException.class, () -> {
+            urlShortenerService.getDestination("http://localhost:8080/dkj4wkdj");
         });
     }
 
     @Test
-    @DisplayName("기존에 저장된 destination이 없는 예외 발생 테스트")
-    void testNotexistedShortenUrl(){
-        //service만 mock한거지 의존하고 있는 repository에서 확인할 수 없음
-        //Q. 그럼 본래는 Repository에서 NewUrlNotfoundException을 발생시키는데 이걸 service로 옮겨야하는지? (repository는 boolean값을 반환하도록 해서..)
+    @DisplayName("shortener url 삭제 요청 성공 테스트")
+    void urlDeleteTest(){
+        when(shortenUrlRepository.findByNewUrl(any())).thenReturn(Optional.of(mock(ShortenUrl.class)));
+        Assertions.assertDoesNotThrow( () -> urlShortenerService.deleteUrl(any()));
     }
+    @Test
+    @DisplayName("shortener url로 삭제 요청이 왔을 시 삭제 할 엔티티를 찾지 못한 경우 실패 테스트")
+    void testNewUrlNotFoundExceptionCausedByDelete(){
+        when(shortenUrlRepository.findByNewUrl((any()))).thenReturn(Optional.empty());
 
+        assertThrows(NewUrlNotFoundException.class, () -> {
+            urlShortenerService.deleteUrl("http://localhost:8080/dkj4wkdj");
+        });
+    }
 };
