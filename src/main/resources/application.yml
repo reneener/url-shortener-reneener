@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod # default profile
+    active: local # default profile
     group:
       local:
         - common
@@ -16,9 +16,7 @@ spring:
   config:
     activate:
       on-profile: local
-
   datasource:
-    hikari.maximum-pool-size: 4
     url: jdbc:mysql://localhost:3306/url_shortner?rewriteBatchedStatements=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: root
     password: root
@@ -41,22 +39,18 @@ spring:
   config:
     activate:
       on-profile: prod
-
   datasource:
-    hikari.maximum-pool-size: 4
-    url: jdbc:mysql://bitly-database:3306/url_shortener?rewriteBatchedStatements=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: root
-    password: root
+    url: jdbc:mysql://bitly-database:3306/url_shortener?useSSL=false
+    username: user
+    password: mysql123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database: mysql
     hibernate:
+      ddl-auto: create
       dialect: org.hibernate.dialect.MySQL8Dialect
-      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
 demo:
   base-url: http://3.37.149.107:8080/
