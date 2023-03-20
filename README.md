@@ -1,4 +1,4 @@
-# 💜 bit.ly
+# 💜 bit.ly  
 
 ![img.png](img.png)  
 
@@ -34,7 +34,3 @@ long URL을 단축시켜주고 본래의 destination으로 redirection해주는 
 ---
 ![image2.png](image2.png)
 ![image3.png](image3.png)
-
-
-
-
