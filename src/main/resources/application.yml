@@ -12,7 +12,7 @@ spring:
     activate:
       on-profile: common
 demo:
-  base-url: http://3.37.149.107:8080/
+  base-url: http://3.37.149.107/
 ---
 spring:
   config:
