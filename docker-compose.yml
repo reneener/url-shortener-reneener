@@ -7,24 +7,20 @@ services:
       context: ./database
     image: yooyoun/bitly-database
     environment:
-      - SPRING_PROFILES_ACTIVE= prod
       - MYSQL_DATABASE=url_shortener
       - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
     ports:
-      - "3306:3306"
-
-  application:
-    container_name: bitly-app
+      - "3308:3306"
+  bitly-backend-app:
+    container_name: bitly-backend-app
     build: .
     depends_on:
       - bitly-database
-    links:
-      - bitly-database
-    image: yooyoun/app-backend-bitly
+    image: yooyoun/bitly-backend-app
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_HOSTNAME:
-      SPRING_DATASOURCE_URL: jdbc:mysql://bitly-database:3306/url_shortener?rewriteBatchedStatements=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
