@@ -16,8 +16,7 @@ long URL을 단축시켜주고 본래의 destination으로 redirection해주는 
 
 ✔️  Url 단축에 적합한 base62 인코딩 방식을 적용하였습니다.
 
-✔️  빠른 학습으로 간단한 react native 앱을 프론트에 적용하였습니다.   
-            - repo: https://github.com/yooyouny/react-bitly-app
+✔️  프론트는 react로 구현하였습니다.
 
 ✔️  Docker와 AWS를 활용하여 배포하였습니다.
 #
