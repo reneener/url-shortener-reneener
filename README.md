@@ -2,7 +2,7 @@
 
 ![img.png](images/img.png)  
 
-🔗 [http://15.164.200.184:3000/](http://15.164.200.184:3000/)
+🔗 현재 빌링문제로 해당 URL 접속이 일시중단 된 상태입니다. 
 
 본 프로젝트는 Spring Boot와 Java를 공부하며 진행한 토이 프로젝트입니다.  
 long URL을 단축시켜주고 본래의 destination으로 redirection해주는 서비스를 제공합니다.   
